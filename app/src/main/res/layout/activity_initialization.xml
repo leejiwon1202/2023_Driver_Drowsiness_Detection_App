@@ -5,26 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".StartActivity">
+    tools:context=".Main.InitializationActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Initialization"
+        android:layout_marginEnd="30dp"/>
 
     <Button
         android:id="@+id/startBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="시작" />
-
-    <Button
-        android:id="@+id/logBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="기록" />
-
-    <Button
-        android:id="@+id/settingBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="설정" />
+        android:text="운전 시작" />
 
 </LinearLayout>

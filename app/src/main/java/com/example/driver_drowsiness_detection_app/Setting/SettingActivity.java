@@ -1,8 +1,10 @@
-package com.example.driver_drowsiness_detection_app;
+package com.example.driver_drowsiness_detection_app.Setting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.driver_drowsiness_detection_app.R;
 
 public class SettingActivity extends AppCompatActivity {
 

@@ -5,26 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".StartActivity">
+    android:orientation="vertical"
+    tools:context=".Main.ExitActivity">
 
-    <Button
-        android:id="@+id/startBtn"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="시작" />
+        android:layout_marginBottom="30dp"
+        android:text="종료하시겠습니까?"/>
 
     <Button
-        android:id="@+id/logBtn"
-        android:layout_width="wrap_content"
+        android:id="@+id/exitBtn"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="기록" />
+        android:layout_marginBottom="10dp"
+        android:text="예"/>
 
     <Button
-        android:id="@+id/settingBtn"
-        android:layout_width="wrap_content"
+        android:id="@+id/mainBtn"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="설정" />
+        android:text="처음으로"/>
 
 </LinearLayout>
