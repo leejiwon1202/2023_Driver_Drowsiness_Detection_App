@@ -29,10 +29,10 @@ public class StartActivity extends AppCompatActivity {
         startBtn.setOnClickListener(view -> {
             int isFirst = pref.getInt("Initialization", 0);
             Intent i;
-            if (isFirst == 0)
+            //if (isFirst == 0)
                 i = new Intent(StartActivity.this, InitializationActivity.class);
-            else
-                i = new Intent(StartActivity.this, DrowsyDetectActivity.class);
+            //else
+            //    i = new Intent(StartActivity.this, DrowsyDetectActivity.class);
             startActivity(i);
         });
 

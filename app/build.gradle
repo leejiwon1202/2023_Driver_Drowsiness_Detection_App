@@ -41,4 +41,7 @@ dependencies {
     //implementation 'com.google.mediapipe:tasks-vision:latest.release'
     implementation 'org.tensorflow:tensorflow-lite:2.7.0'
     implementation 'org.tensorflow:tensorflow-lite-support:0.3.0'
+
+    implementation 'com.google.mediapipe:solution-core:latest.release'
+    implementation 'com.google.mediapipe:facemesh:latest.release'
 }

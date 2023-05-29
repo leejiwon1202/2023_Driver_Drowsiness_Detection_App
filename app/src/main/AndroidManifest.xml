@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
+    <uses-feature android:name="android.hardware.camera"  android:required="true" />
+
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -18,36 +20,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Driver_Drowsiness_Detection_App"
         tools:targetApi="31">
-        <activity
-            android:name=".Main.ExitActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Main.SaveActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Main.InitializationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Log.DetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Log.ListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Setting.SettingActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Log.LogActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Main.DrowsyDetectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StartActivity"
-            android:exported="true">
+        <activity android:name=".Main.ExitActivity"             android:exported="false" />
+        <activity android:name=".Main.SaveActivity"             android:exported="false" />
+        <activity android:name=".Main.InitializationActivity"   android:exported="false" />
+        <activity android:name=".Log.DetailActivity"            android:exported="false" />
+        <activity android:name=".Log.ListActivity"              android:exported="false" />
+        <activity android:name=".Setting.SettingActivity"       android:exported="false" />
+        <activity android:name=".Log.LogActivity"               android:exported="false" />
+        <activity android:name=".Main.DrowsyDetectActivity"     android:exported="false" />
+        <activity android:name=".StartActivity"                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
