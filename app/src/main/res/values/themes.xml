@@ -6,4 +6,7 @@
     </style>
 
     <style name="Theme.Driver_Drowsiness_Detection_App" parent="Base.Theme.Driver_Drowsiness_Detection_App" />
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+    </style>
 </resources>
