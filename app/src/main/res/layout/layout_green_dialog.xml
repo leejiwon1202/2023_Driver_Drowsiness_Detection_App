@@ -36,12 +36,13 @@
             android:id="@+id/btnOk"
             android:layout_width="150dp"
             android:layout_height="40dp"
-            android:gravity="center"
+            android:layout_gravity="center"
             android:layout_marginTop="60dp"
             android:textSize="14sp"
             android:background="@drawable/button_green_background"
             android:textColor="@color/white" />
 
     </LinearLayout>
+
 
 </LinearLayout>

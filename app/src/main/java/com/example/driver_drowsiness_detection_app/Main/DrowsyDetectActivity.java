@@ -2,7 +2,9 @@ package com.example.driver_drowsiness_detection_app.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.widget.Button;
@@ -11,8 +13,9 @@ import android.widget.TextView;
 import com.example.driver_drowsiness_detection_app.R;
 
 public class DrowsyDetectActivity extends AppCompatActivity {
-
     private TextView textView;
+    SharedPreferences pref;
+    float avg_close, avg_r, avg_l, avg_m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,12 @@ public class DrowsyDetectActivity extends AppCompatActivity {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         });
+
+        pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        avg_close = pref.getFloat("avg_close", 0.0f);
+        avg_r = pref.getFloat("avg_r", 0.0f);
+        avg_l = pref.getFloat("avg_l", 0.0f);
+        avg_m = pref.getFloat("avg_m", 0.0f);
     }
 
 //    Float[] values = new Float[]{

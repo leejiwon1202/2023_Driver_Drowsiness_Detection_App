@@ -32,7 +32,7 @@ public class StartActivity extends AppCompatActivity {
             //if (isFirst == 0)
                 i = new Intent(StartActivity.this, InitializationActivity.class);
             //else
-            //    i = new Intent(StartActivity.this, DrowsyDetectActivity.class);
+                //i = new Intent(StartActivity.this, DrowsyDetectActivity.class);
             startActivity(i);
         });
 

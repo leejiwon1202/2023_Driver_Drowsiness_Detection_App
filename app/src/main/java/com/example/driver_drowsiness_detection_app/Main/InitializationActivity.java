@@ -23,6 +23,8 @@ import com.google.mediapipe.solutions.facemesh.FaceMesh;
 import com.google.mediapipe.solutions.facemesh.FaceMeshOptions;
 import com.google.mediapipe.solutions.facemesh.FaceMeshResult;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +36,6 @@ public class InitializationActivity extends AppCompatActivity {
     private CameraInput cameraInput;
     private SolutionGlSurfaceView<FaceMeshResult> glSurfaceView;
     FrameLayout frameLayout;
-    private long beforeTime;
 
     private int[] indexAll = new int[] {
             46, 53, 52, 55, 65, 276, 283, 282, 295, 285,
@@ -44,9 +45,12 @@ public class InitializationActivity extends AppCompatActivity {
     private int[] indexER = new int[] {130, 160, 158, 133, 153, 144};
     private int[] indexEL = new int[] {359, 387, 385, 362, 380, 373};
     private int[] indexM = new int[] {61, 0, 291, 17};
-    private double sum_r, sum_l, sum_m;
-    private double avg_r, avg_l, avg_m;
-    private long cnt;
+    private double sum_r, sum_l, sum_m, avg_r, avg_l, avg_m;
+    float avg_close;
+    private long cnt, startTime, closeTime;
+    private String mode;
+    private ArrayList<Long> closeTimes;
+    private boolean isRecording;
 
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -58,6 +62,7 @@ public class InitializationActivity extends AppCompatActivity {
 
         frameLayout = findViewById(R.id.display_layout);
 
+        setupLiveDemoUiComponents();
         showCustomDialog();
     }
     private void showCustomDialog() {
@@ -65,22 +70,19 @@ public class InitializationActivity extends AppCompatActivity {
         View view = LayoutInflater.from(InitializationActivity.this).inflate(R.layout.layout_green_dialog, (LinearLayout)findViewById(R.id.layoutDialog));
         builder.setView(view);
 
-        ((TextView) view.findViewById(R.id.textTitle)).setText("Title");
-        ((TextView) view.findViewById(R.id.textMessage)).setText("text text text text");
+        ((TextView) view.findViewById(R.id.textTitle)).setText("초기화");
+        ((TextView) view.findViewById(R.id.textMessage)).setText("지금부터 3분 동안 사용자의 얼굴 정보를 저장합니다.");
         ((Button) view.findViewById(R.id.btnOk)).setText("OK~");
 
         AlertDialog alertDialog = builder.create();
         view.findViewById(R.id.btnOk).setOnClickListener(v -> {
-            setupLiveDemoUiComponents();
             alertDialog.dismiss();
+            sum_r = 0.0;
+            sum_l = 0.0;
+            sum_m = 0.0;
+            cnt = 0;
         });
         alertDialog.show();
-
-        beforeTime = System.currentTimeMillis();
-        sum_r = 0.0;
-        sum_l = 0.0;
-        sum_m = 0.0;
-        cnt = 0;
     }
     @Override
     protected void onResume() {
@@ -144,17 +146,14 @@ public class InitializationActivity extends AppCompatActivity {
             facemesh.close();
     }
 
-
-
     private void RecordUserData(FaceMeshResult result, boolean showPixelValues) {
         if (result == null || result.multiFaceLandmarks().isEmpty()) {
             return;
         }
         // LandmarkProto.NormalizedLandmark noseLandmark = result.multiFaceLandmarks().get(0).getLandmarkList().get(1);
+        List<LandmarkProto.NormalizedLandmark> LandmarkList =  result.multiFaceLandmarks().get(0).getLandmarkList();
 
-        if(System.currentTimeMillis() - beforeTime < 60000) {
-            List<LandmarkProto.NormalizedLandmark> LandmarkList =  result.multiFaceLandmarks().get(0).getLandmarkList();
-
+        if(cnt < 100) {
             double ear_r = calc_ear(LandmarkList, indexER);
             double ear_l = calc_ear(LandmarkList, indexEL);
             double ear_m = calc_awm(LandmarkList);
@@ -168,7 +167,7 @@ public class InitializationActivity extends AppCompatActivity {
             Log.i(TAG, String.format("ear_l =%f / sum_l =%f", ear_l, sum_l));
             Log.i(TAG, String.format("ear_m =%f / sum_m =%f", ear_m, sum_m));
         }
-        else {
+        else if(cnt == 100) {
             avg_r = sum_r / cnt;
             avg_l = sum_l / cnt;
             avg_m = sum_m / cnt;
@@ -177,12 +176,36 @@ public class InitializationActivity extends AppCompatActivity {
             Log.i(TAG, String.format("sum_l =%f / avg_l =%f", sum_l, avg_l));
             Log.i(TAG, String.format("sum_m =%f / avg_m =%f", sum_m, avg_m));
 
-            initilzation();
+            cnt += 1;
+
+            startTime = System.currentTimeMillis();
+            closeTime = 0;
+            closeTimes = new ArrayList<Long>();
+            mode = "Opened";
+            isRecording = true;
+        }
+        else if(System.currentTimeMillis() - startTime < 30000) {
+            double ear_r = calc_ear(LandmarkList, indexER);
+            double ear_l = calc_ear(LandmarkList, indexEL);
+
+            if(ear_r < avg_r * 0.7 && ear_l < avg_l * 0.7) {
+                if(mode.equals("Opened"))
+                    closeTime = System.currentTimeMillis();
+                mode = "Closed";
+            }
+            else {
+                if(mode.equals("Closed"))
+                    closeTimes.add(System.currentTimeMillis() - closeTime);
+                mode = "Opened";
+            }
+
+            Log.i(TAG, "CurrentMode : " + mode);
+        }
+        else if(isRecording) {
+            isRecording = false;
             saveUserData();
         }
     }
-
-
 
     private double calc_ear(List<LandmarkProto.NormalizedLandmark> p_list, int[] idx) {
         double a = Math.pow((p_list.get(idx[0]).getX() - p_list.get(idx[3]).getX()), 2) * 10000 +
@@ -207,20 +230,27 @@ public class InitializationActivity extends AppCompatActivity {
         return a * b * Math.PI;
     }
 
+    private void saveUserData() {
+        long total = 0;
+        for(long cTime : closeTimes)
+            total += cTime;
+        avg_close = (total / closeTimes.size()) / 1000.0f;
+        Log.i(TAG, String.format("Initilzation avg_close =%f", avg_close));
 
-
-
-    private void initilzation() {
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         editor = pref.edit();
         editor.putInt("Initialization", 1);
+        editor.putFloat("avg_close", avg_close);
+        editor.putFloat("avg_r", (float) avg_r);
+        editor.putFloat("avg_l", (float) avg_l);
+        editor.putFloat("avg_m", (float) avg_m);
         editor.apply();
-    }
-    private void saveUserData() {
 
         goNextActivity();
     }
     private void goNextActivity() {
-
+        Intent i = new Intent(InitializationActivity.this, DrowsyDetectActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 }
