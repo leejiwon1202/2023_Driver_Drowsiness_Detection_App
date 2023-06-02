@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
 import android.os.Bundle;
 
 import android.widget.Button;
@@ -12,15 +13,28 @@ import android.widget.TextView;
 
 import com.example.driver_drowsiness_detection_app.R;
 
+import org.tensorflow.lite.Interpreter;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+
 public class DrowsyDetectActivity extends AppCompatActivity {
     private TextView textView;
     SharedPreferences pref;
     float avg_close, avg_r, avg_l, avg_m;
+    Interpreter interpreter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
         setContentView(R.layout.activity_drowsy_detect);
+
+        interpreter = getTfliteInterpreter("DrowsyDetect.tflite");
 
         Button stopBtn = findViewById(R.id.stopBtn);
         stopBtn.setOnClickListener(view -> {
@@ -36,45 +50,41 @@ public class DrowsyDetectActivity extends AppCompatActivity {
         avg_m = pref.getFloat("avg_m", 0.0f);
     }
 
-//    Float[] values = new Float[]{
-//                        0.15961f, 0.06411f, 0.08845f,
-//                        0.18891f, 0.04623f, 0.06253f,
-//                        0.23152f, 0.03558f, 0.03913f,
-//                        0.36978f, 0.04687f, 0.00760f,
-//                        0.29022f, 0.03412f, 0.02085f,
-//                        0.71790f, 0.06672f, 0.08905f,
-//                        0.68945f, 0.04798f, 0.06279f,
-//                        0.64726f, 0.03656f, 0.03938f,
-//                        0.58828f, 0.03485f, 0.02073f,
-//                        0.50769f, 0.04746f, 0.00759f,
-//                        0.19023f, 0.10525f, 0.10033f,
-//                        0.24130f, 0.09618f, 0.06237f,
-//                        0.28932f, 0.09443f, 0.05387f,
-//                        0.34208f, 0.10165f, 0.06749f,
-//                        0.29293f, 0.10826f, 0.05354f,
-//                        0.24359f, 0.10942f, 0.06264f,
-//                        0.68080f, 0.10754f, 0.10024f,
-//                        0.63074f, 0.09529f, 0.06227f,
-//                        0.58071f, 0.09230f, 0.05378f,
-//                        0.52843f, 0.10302f, 0.06703f,
-//                        0.57739f, 0.11018f, 0.05328f,
-//                        0.62696f, 0.11104f, 0.06255f,
-//                        0.43662f, 0.07848f, -0.0091f,
-//                        0.43620f, 0.09463f, -0.0406f,
-//                        0.43508f, 0.12370f, -0.1132f,
-//                        0.43320f, 0.15996f, -0.1727f,
-//                        0.32270f, 0.29692f, -0.0458f,
-//                        0.36853f, 0.26237f, -0.1049f,
-//                        0.43909f, 0.25491f, -0.1266f,
-//                        0.50700f, 0.26304f, -0.1046f,
-//                        0.54777f, 0.29746f, -0.0461f,
-//                        0.50033f, 0.30872f, -0.1081f,
-//                        0.43736f, 0.31285f, -0.1212f,
-//                        0.37333f, 0.30814f, -0.1079f,
-//                        0.08060f, 0.18637f, 0.35090f,
-//                        0.09698f, 0.26986f, 0.29321f,
-//                        0.43218f, 0.42622f, -0.0773f,
-//                        0.75329f, 0.31789f, 0.24118f,
-//                        0.78945f, 0.19031f, 0.35378f
-//                };
+    private boolean isDrowsy() {
+        float[] inputs = new float[]{0.867472f, 0.957693f, 0.780214f, 0.594963f, 0.591247f, 0.900008f, 0.112998f, 0.297898f, 0.487909f, 0.439365f, 0.934108f, 0.078781f, 0.540245f, 0.443055f, 0.779837f, 0.364080f, 0.764681f, 0.152206f, 0.102818f, 0.937937f, 0.995813f, 0.502016f, 0.982011f, 0.991649f, 0.854641f, 0.677497f, 0.332676f, 0.007113f, 0.793076f, 0.210241f, 0.648541f, 0.635861f, 0.088794f, 0.047339f, 0.742066f, 0.886561f, 0.683194f, 0.906738f, 0.710377f, 0.077227f, 0.705649f, 0.817459f, 0.470080f, 0.680814f, 0.057251f, 0.577675f, 0.920323f, 0.974217f, 0.293278f, 0.550637f, 0.900114f, 0.604802f, 0.833485f, 0.017986f, 0.583661f, 0.232412f, 0.902437f, 0.768435f, 0.467879f, 0.056156f, 0.626132f, 0.635685f, 0.690674f, 0.566053f, 0.323473f, 0.342204f, 0.124710f, 0.792990f, 0.821292f, 0.113590f, 0.966676f, 0.658183f, 0.942617f, 0.374754f, 0.055238f, 0.485900f, 0.017242f, 0.615865f, 0.375297f, 0.145617f, 0.864069f, 0.106706f, 0.919611f, 0.235706f, 0.235095f, 0.739020f, 0.622990f, 0.258536f, 0.160082f, 0.673858f, 0.313847f, 0.571240f, 0.036692f, 0.526417f, 0.776149f, 0.337847f, 0.198942f, 0.082001f, 0.413588f, 0.028557f, 0.915082f, 0.797611f, 0.404119f, 0.692338f, 0.829679f, 0.386381f, 0.084491f, 0.330018f, 0.969385f, 0.611673f, 0.491474f, 0.140900f, 0.500174f, 0.238397f, 0.725098f, 0.333640f, 0.121161f, };
+        ByteBuffer input = ByteBuffer.allocateDirect(4 * 117).order(ByteOrder.nativeOrder());
+        for (float f : inputs) {
+            input.putFloat(f);
+        }
+
+        int bufferSize = 2 * java.lang.Float.SIZE / java.lang.Byte.SIZE;
+        ByteBuffer modelOutput = ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder());
+
+        interpreter.run(input, modelOutput);
+
+        modelOutput.rewind();
+
+        FloatBuffer probabilities = modelOutput.asFloatBuffer();
+        //tv_output.setText(String.format("%1.4f",probabilities.get(0)) + " " + String.format("%1.4f",probabilities.get(1)));
+        return true;
+    }
+
+    private Interpreter getTfliteInterpreter(String modelPath) {
+        try {
+            return new Interpreter(loadModelFile(DrowsyDetectActivity.this, modelPath));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private MappedByteBuffer loadModelFile(Activity activity, String modelPath) throws IOException {
+        AssetFileDescriptor fileDescriptor = activity.getAssets().openFd(modelPath);
+        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
+        FileChannel fileChannel = inputStream.getChannel();
+        long startOffset = fileDescriptor.getStartOffset();
+        long declaredLength = fileDescriptor.getDeclaredLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+    }
 }
