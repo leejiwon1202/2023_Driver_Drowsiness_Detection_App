@@ -18,29 +18,32 @@
             android:id="@+id/textTitle"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:background="@drawable/title_green_background"
+            android:background="@drawable/title_pink_background"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
+        <EditText
             android:id="@+id/textMessage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_height="70dp"
+            android:hint="(예시 : 홍길동)"
+            android:maxLength="10"
+            android:layout_marginTop="20dp"
             android:gravity="center"
-            android:textColor="@color/green_700"
-            android:textSize="16sp" />
+            android:background="@null"
+            android:textColor="@color/black"
+            android:textSize="25sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnOk"
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="20dp"
             android:textSize="14sp"
-            android:background="@drawable/button_green_background"
+            android:background="@drawable/button_pink_background"
             android:textColor="@color/white" />
 
     </LinearLayout>

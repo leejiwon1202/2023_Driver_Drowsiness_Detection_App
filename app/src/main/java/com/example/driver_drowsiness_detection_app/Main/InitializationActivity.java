@@ -6,10 +6,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -82,6 +85,8 @@ public class InitializationActivity extends AppCompatActivity {
             sum_m = 0.0;
             cnt = 0;
         });
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
     }
     @Override

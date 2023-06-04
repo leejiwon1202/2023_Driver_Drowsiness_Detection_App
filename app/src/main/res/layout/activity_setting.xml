@@ -8,8 +8,19 @@
     tools:context=".Setting.SettingActivity">
 
     <TextView
+        android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="setting" />
+        android:text="안녕하세요!" />
+
+    <EditText
+        android:id="@+id/user_name"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

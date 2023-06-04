@@ -1,0 +1,1 @@
+SELECT * FROM drowsy_schema.drowsy_data;
