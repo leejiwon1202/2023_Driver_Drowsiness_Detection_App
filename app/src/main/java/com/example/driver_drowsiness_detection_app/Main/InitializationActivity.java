@@ -189,7 +189,7 @@ public class InitializationActivity extends AppCompatActivity {
             mode = "Opened";
             isRecording = true;
         }
-        else if(System.currentTimeMillis() - startTime < 10000) {
+        else if(System.currentTimeMillis() - startTime < 5000) {
             double ear_r = calc_ear(LandmarkList, indexER);
             double ear_l = calc_ear(LandmarkList, indexEL);
 

@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetData_Driving extends AsyncTask<String,Void,String>  {
+public class GetData_Drowsy extends AsyncTask<String,Void,String>  {
     private String mJsonString;
 
     @Override
@@ -22,7 +22,6 @@ public class GetData_Driving extends AsyncTask<String,Void,String>  {
         super.onPostExecute(result);
 
         if (result != null) {
-            Log.d("DrowsyDetectInsert", result);
             mJsonString = result;
         }
     }

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.driver_drowsiness_detection_app.Log.LogActivity;
+import com.example.driver_drowsiness_detection_app.Main.DrowsyDetectActivity;
 import com.example.driver_drowsiness_detection_app.Main.InitializationActivity;
 import com.example.driver_drowsiness_detection_app.PHP.GetData_User;
 import com.example.driver_drowsiness_detection_app.PHP.InsertData_User;
@@ -55,22 +56,22 @@ public class StartActivity extends AppCompatActivity {
         user_name = pref.getString("user_name", "");
 
         tv_welcome = findViewById(R.id.tv_welcome);
-        //if(user_id < 0) {
+        if(user_id < 0) {
             showCustomDialog();
-        //}
-        //else {
+        }
+        else {
             tv_welcome.setText(String.format("반가워요 %s(#%d)님!", user_name, user_id));
-        //}
+        }
 
         // 1
         Button startBtn = findViewById(R.id.startBtn);
         startBtn.setOnClickListener(view -> {
             int isFirst = pref.getInt("Initialization", 0);
             Intent i;
-            //if (isFirst == 0)
+            if (isFirst == 0)
                 i = new Intent(StartActivity.this, InitializationActivity.class);
-            //else
-                //i = new Intent(StartActivity.this, DrowsyDetectActivity.class);
+            else
+                i = new Intent(StartActivity.this, DrowsyDetectActivity.class);
             startActivity(i);
         });
 
@@ -158,7 +159,6 @@ public class StartActivity extends AppCompatActivity {
                 }
             }
         } catch (JSONException E) {
-            Log.d("PHPTest", E.getMessage());
         }
         return nextID;
     }

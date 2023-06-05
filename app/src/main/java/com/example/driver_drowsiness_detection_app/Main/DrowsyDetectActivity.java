@@ -44,12 +44,12 @@ public class DrowsyDetectActivity extends AppCompatActivity {
         super.onCreate(null);
         setContentView(R.layout.activity_drowsy_detect);
 
-        getTask = new GetData_Driving();
-        getTask.execute( "http://" + IP_ADDRESS + "/android_driving_select_php.php", "");
-
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         user_id = pref.getInt("user_id", -1);
+
+        getTask = new GetData_Driving();
+        getTask.execute( "http://" + IP_ADDRESS + "/android_driving_select_php.php", String.valueOf(user_id));
 
         interpreter = getTfliteInterpreter("DrowsyDetect.tflite");
 
@@ -59,7 +59,6 @@ public class DrowsyDetectActivity extends AppCompatActivity {
 
             InsertData_Driving insTask = new InsertData_Driving();
             insTask.execute("http://"+IP_ADDRESS+"/android_driving_insert_php.php", String.valueOf(user_id), s_time, s_time);
-
             driving_id = getID(getTask.getmJsonString());
         });
 

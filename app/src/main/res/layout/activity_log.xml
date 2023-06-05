@@ -4,23 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:padding="50dp"
     android:orientation="vertical"
     tools:context=".Log.LogActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="log" />
+        android:text="사용자 정보" />
 
     <Button
-        android:id="@+id/listBtn"
+        android:id="@+id/btn_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="더보기" />
 
     <Button
-        android:id="@+id/detailBtn"
+        android:id="@+id/btn_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="상세 보기" />
