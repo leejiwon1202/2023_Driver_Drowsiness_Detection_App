@@ -37,7 +37,7 @@ public class StartActivity extends AppCompatActivity {
     SharedPreferences pref;
     private int user_id;
     private String user_name;
-    private static String IP_ADDRESS = "43.201.235.250";
+    private static String IP_ADDRESS = "52.79.176.182";
     private GetData_User getTask;
     private TextView tv_welcome;
 
@@ -45,11 +45,6 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
-        String nowTime1 = sdf1.format(now);
-        Log.d("StartActivityTest", nowTime1);
 
         // 0
         getTask = new GetData_User();
@@ -60,12 +55,12 @@ public class StartActivity extends AppCompatActivity {
         user_name = pref.getString("user_name", "");
 
         tv_welcome = findViewById(R.id.tv_welcome);
-        if(user_id < 0) {
+        //if(user_id < 0) {
             showCustomDialog();
-        }
-        else {
+        //}
+        //else {
             tv_welcome.setText(String.format("반가워요 %s(#%d)님!", user_name, user_id));
-        }
+        //}
 
         // 1
         Button startBtn = findViewById(R.id.startBtn);
@@ -99,14 +94,12 @@ public class StartActivity extends AppCompatActivity {
 
         ((TextView) view.findViewById(R.id.textTitle)).setText("사용하실 이름을 작성해 주세요.");
         ((Button) view.findViewById(R.id.btnOk)).setText("등록");
-
         AlertDialog alertDialog = builder.create();
+
         view.findViewById(R.id.btnOk).setOnClickListener(v -> {
             String input_name = ((TextView) view.findViewById(R.id.textMessage)).getText().toString().trim();
-
             if(input_name.length() >= 2){
                 int nextID = getID(input_name);
-
                 if (nextID != -1) {
                     InsertData_User insTask = new InsertData_User();
                     insTask.execute("http://"+IP_ADDRESS+"/android_user_insert_php.php", input_name);
@@ -164,7 +157,8 @@ public class StartActivity extends AppCompatActivity {
                     return -1;
                 }
             }
-        } catch (JSONException e) {
+        } catch (JSONException E) {
+            Log.d("PHPTest", E.getMessage());
         }
         return nextID;
     }

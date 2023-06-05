@@ -1,6 +1,7 @@
 package com.example.driver_drowsiness_detection_app.PHP;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -55,10 +56,11 @@ public class InsertData_User extends AsyncTask<String,Void,String> {
                 sb.append(line);
             }
             bufferedReader.close();
-
-            return  sb.toString();
+            Log.d("PHPTest", sb.toString());
+            return sb.toString();
         }
         catch (Exception e) {
+            Log.d("PHPTest", e.getMessage());
             return  new String("Error " + e.getMessage());
         }
     }

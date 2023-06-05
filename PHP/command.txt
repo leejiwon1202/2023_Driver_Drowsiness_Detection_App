@@ -1,0 +1,38 @@
+ubuntu@3.37.150.7
+sudo chown -R ubuntu *
+
+sudo apt update
+sudo apt upgrade
+
+sudo apt install mysql-server net-tools php php-mysql
+sudo apt-get install apache2 php php-mysql
+
+sudo ufw allow 3306
+sudo ufw allow 80
+sudo ufw allow 22 
+netstat -tnlp
+netstat -tnlp | grep 포트번호
+
+sudo service apache2 start
+sudo systemctl restart apache2
+sudo service mysql start
+
+sudo service mysql status 
+sudo mysql -u root -p mysql
+
+SELECT User, Host, plugin FROM mysql.user;
+CREATE USER 'root'@'%' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+CREATE USER 'jw'@'%' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON *.* TO 'jw'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+
+sudo chown -R ubuntu *
+sudo vi android_user_select_php.php
+sudo vi android_user_insert_php.php
+sudo vi android_driving_update_php.php
+sudo vi android_driving_insert_php.php
+sudo vi android_driving_select_php.php
+sudo vi dbcon.php
+

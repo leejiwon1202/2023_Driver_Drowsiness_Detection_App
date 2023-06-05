@@ -14,9 +14,21 @@
         android:layout_marginEnd="30dp"/>
 
     <Button
-        android:id="@+id/stopBtn"
+        android:id="@+id/btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="운전 시작 테스트"/>
+
+    <Button
+        android:id="@+id/btn_stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="운전 종료" />
+
+    <Button
+        android:id="@+id/btn_drowsy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="졸림!" />
 
 </LinearLayout>

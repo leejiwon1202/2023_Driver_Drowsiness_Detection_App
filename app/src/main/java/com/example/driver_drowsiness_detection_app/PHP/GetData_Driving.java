@@ -10,7 +10,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetData_User extends AsyncTask<String,Void,String>  {
+public class GetData_Driving extends AsyncTask<String,Void,String>  {
     private String mJsonString;
 
     @Override

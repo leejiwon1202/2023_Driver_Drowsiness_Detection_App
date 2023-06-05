@@ -3,16 +3,21 @@ package com.example.driver_drowsiness_detection_app.Main;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.widget.Button;
-import android.widget.TextView;
 
+import com.example.driver_drowsiness_detection_app.PHP.GetData_Driving;
+import com.example.driver_drowsiness_detection_app.PHP.InsertData_Driving;
+import com.example.driver_drowsiness_detection_app.PHP.InsertData_Drowsy;
 import com.example.driver_drowsiness_detection_app.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.tensorflow.lite.Interpreter;
 
 import java.io.FileInputStream;
@@ -22,28 +27,60 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DrowsyDetectActivity extends AppCompatActivity {
-    private TextView textView;
-    SharedPreferences pref;
-    float avg_close, avg_r, avg_l, avg_m;
-    Interpreter interpreter;
-
+    private static String IP_ADDRESS = "52.79.176.182";
+    private SharedPreferences pref;
+    private float avg_close, avg_r, avg_l, avg_m;
+    private Interpreter interpreter;
+    private int user_id, driving_id;
+    private String s_time;
+    private GetData_Driving getTask;
+    private SimpleDateFormat format;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
         setContentView(R.layout.activity_drowsy_detect);
 
+        getTask = new GetData_Driving();
+        getTask.execute( "http://" + IP_ADDRESS + "/android_driving_select_php.php", "");
+
+        format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        user_id = pref.getInt("user_id", -1);
+
         interpreter = getTfliteInterpreter("DrowsyDetect.tflite");
 
-        Button stopBtn = findViewById(R.id.stopBtn);
-        stopBtn.setOnClickListener(view -> {
-            Intent i = new Intent(DrowsyDetectActivity.this, SaveActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
+        Button btn_start = findViewById(R.id.btn_start);
+        btn_start.setOnClickListener(view -> {
+            s_time = format.format(new Date());
+
+            InsertData_Driving insTask = new InsertData_Driving();
+            insTask.execute("http://"+IP_ADDRESS+"/android_driving_insert_php.php", String.valueOf(user_id), s_time, s_time);
+
+            driving_id = getID(getTask.getmJsonString());
         });
 
-        pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
+        Button btn_stop = findViewById(R.id.btn_stop);
+        btn_stop.setOnClickListener(view -> {
+            InsertData_Driving insTask = new InsertData_Driving();
+            insTask.execute("http://"+IP_ADDRESS+"/android_driving_update_php.php", String.valueOf(user_id), s_time, format.format(new Date()));
+
+            //Intent i = new Intent(DrowsyDetectActivity.this, SaveActivity.class);
+            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            //startActivity(i);
+        });
+
+        Button btn_drowsy = findViewById(R.id.btn_drowsy);
+        btn_drowsy.setOnClickListener(view -> {
+            int temp = 21;
+            InsertData_Drowsy insTask = new InsertData_Drowsy();
+            Log.d(("DrowsyDetectInsert "), String.valueOf(driving_id)+String.valueOf(user_id)+format.format(new Date())+String.valueOf(temp));
+            insTask.execute("http://"+IP_ADDRESS+"/android_drowsy_insert_php.php", String.valueOf(driving_id), String.valueOf(user_id), format.format(new Date()), String.valueOf(temp));
+        });
+
         avg_close = pref.getFloat("avg_close", 0.0f);
         avg_r = pref.getFloat("avg_r", 0.0f);
         avg_l = pref.getFloat("avg_l", 0.0f);
@@ -86,5 +123,25 @@ public class DrowsyDetectActivity extends AppCompatActivity {
         long startOffset = fileDescriptor.getStartOffset();
         long declaredLength = fileDescriptor.getDeclaredLength();
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+    }
+
+    private int getID(String Json) {
+        String TAG_JSON="webnautes";
+        String TAG_DRIVING_ID = "driving_id";
+
+        int nextID = -1;
+        try {
+            JSONObject jsonObject = new JSONObject(Json);
+            JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+            int jsonSize = jsonArray.length();
+
+            for(int i=0;i<jsonSize;i++){
+                JSONObject item = jsonArray.getJSONObject(i);
+
+                int item_id = item.getInt(TAG_DRIVING_ID);
+                nextID = Math.max(item_id+1, nextID);
+            }
+        } catch (JSONException E) {}
+        return nextID;
     }
 }
