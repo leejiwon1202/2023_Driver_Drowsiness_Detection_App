@@ -44,4 +44,6 @@ dependencies {
 
     implementation 'com.google.mediapipe:solution-core:latest.release'
     implementation 'com.google.mediapipe:facemesh:latest.release'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }

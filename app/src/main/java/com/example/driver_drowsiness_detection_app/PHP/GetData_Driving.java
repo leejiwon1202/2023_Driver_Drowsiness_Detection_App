@@ -16,13 +16,13 @@ public class GetData_Driving extends AsyncTask<String,Void,String>  {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        mJsonString = "";
     }
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
 
         if (result != null) {
-            Log.d("DrowsyDetectInsert", result);
             mJsonString = result;
         }
     }

@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.example.driver_drowsiness_detection_app.Log.LogActivity;
 import com.example.driver_drowsiness_detection_app.Main.DrowsyDetectActivity;
 import com.example.driver_drowsiness_detection_app.Main.InitializationActivity;
+import com.example.driver_drowsiness_detection_app.PHP.GetData_Driving;
+import com.example.driver_drowsiness_detection_app.PHP.GetData_Drowsy;
 import com.example.driver_drowsiness_detection_app.PHP.GetData_User;
 import com.example.driver_drowsiness_detection_app.PHP.InsertData_User;
 import com.example.driver_drowsiness_detection_app.Setting.SettingActivity;
@@ -40,6 +42,8 @@ public class StartActivity extends AppCompatActivity {
     private String user_name;
     private static String IP_ADDRESS = "52.79.176.182";
     private GetData_User getTask;
+    private GetData_Driving getTask1;
+    private GetData_Drowsy getTask2;
     private TextView tv_welcome;
 
     @Override
@@ -50,6 +54,8 @@ public class StartActivity extends AppCompatActivity {
         // 0
         getTask = new GetData_User();
         getTask.execute( "http://" + IP_ADDRESS + "/android_user_select_php.php", "");
+        getTask1 = new GetData_Driving();
+        getTask2 = new GetData_Drowsy();
 
         pref = getSharedPreferences("pref", Activity.MODE_PRIVATE);
         user_id = pref.getInt("user_id", -1);
@@ -60,6 +66,8 @@ public class StartActivity extends AppCompatActivity {
             showCustomDialog();
         }
         else {
+            getTask1.execute( "http://" + IP_ADDRESS + "/android_driving_select_php.php", String.valueOf(user_id));
+            getTask2.execute( "http://" + IP_ADDRESS + "/android_drowsy_select_php.php", String.valueOf(user_id));
             tv_welcome.setText(String.format("반가워요 %s(#%d)님!", user_name, user_id));
         }
 
@@ -77,6 +85,11 @@ public class StartActivity extends AppCompatActivity {
 
         Button logBtn = findViewById(R.id.logBtn);
         logBtn.setOnClickListener(view -> {
+            editor = pref.edit();
+            editor.putString("Driving_data", getTask1.getmJsonString());
+            editor.putString("Drowsy_data", getTask2.getmJsonString());
+            editor.apply();
+
             Intent i = new Intent(StartActivity.this, LogActivity.class);
             startActivity(i);
         });
@@ -111,6 +124,9 @@ public class StartActivity extends AppCompatActivity {
                     editor.apply();
 
                     tv_welcome.setText(String.format("반가워요 %s(#%d)님!", input_name, nextID));
+
+                    getTask1.execute( "http://" + IP_ADDRESS + "/android_driving_select_php.php", String.valueOf(user_id));
+                    getTask2.execute( "http://" + IP_ADDRESS + "/android_drowsy_select_php.php", String.valueOf(user_id));
 
                     Toast toast = Toast.makeText(StartActivity.this, "등록되었습니다.", Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.BOTTOM, 0,300);

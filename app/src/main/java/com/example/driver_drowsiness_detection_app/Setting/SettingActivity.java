@@ -22,34 +22,11 @@ import java.net.URL;
 import com.example.driver_drowsiness_detection_app.R;
 
 public class SettingActivity extends AppCompatActivity {
-    private static String IP_ADDRESS = "43.201.235.250";
-    private static String TAG = "phptest";
-
-    private TextView user_name;
-    private Button registerBtn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        user_name = (EditText) findViewById(R.id.user_name);
-        registerBtn = (Button) findViewById(R.id.registerBtn);
-
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String Sname = user_name.getText().toString().trim();
-
-                if(Sname.length() >= 2) {
-                    InsertData task = new InsertData();
-                    task.execute("http://"+IP_ADDRESS+"/android_log_inset_php.php", Sname);
-                }
-                else {
-                    Toast.makeText(SettingActivity.this, "2자리 이상 입력해주세요.", Toast.LENGTH_LONG);
-                }
-            }
-        });
     }
 
     class InsertData extends AsyncTask<String,Void,String> { // 통신을 위한 InsertData 생성
@@ -66,7 +43,6 @@ public class SettingActivity extends AppCompatActivity {
             super.onPostExecute(result);
             progressDialog.dismiss(); //onPostExcute 에 오게되면 진행 다이얼로그 취소
             // Toast.makeText(SettingActivity.this, result, Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "POST response  - " + result); // result 값 확인하기
         }
 
         @Override
@@ -90,7 +66,6 @@ public class SettingActivity extends AppCompatActivity {
                 outputStream.close();
 
                 int responseStatusCode = httpURLConnection.getResponseCode(); //응답을 읽는다.
-                Log.d(TAG, "POST response code-" + responseStatusCode);
 
                 InputStream inputStream;
                 if(responseStatusCode == httpURLConnection.HTTP_OK){
@@ -115,7 +90,6 @@ public class SettingActivity extends AppCompatActivity {
                 return  sb.toString();
             }
             catch (Exception e) {
-                Log.d(TAG, "InsertData: Error",e);
                 return  new String("Error " + e.getMessage());
             }
         }
