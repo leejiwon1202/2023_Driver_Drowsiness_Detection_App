@@ -104,8 +104,6 @@ public class InitializationActivity extends AppCompatActivity {
         cameraInput.close();
     }
 
-
-
     private void setupLiveDemoUiComponents() {
         stopCurrentPipeline();
         setupStreamingModePipeline();
