@@ -22,7 +22,6 @@
         android:theme="@style/Theme.Driver_Drowsiness_Detection_App"
         tools:targetApi="31">
         <activity android:name=".Main.ExitActivity"             android:exported="false" />
-        <activity android:name=".Main.SaveActivity"             android:exported="false" />
         <activity android:name=".Main.InitializationActivity"   android:exported="false" />
         <activity android:name=".Log.DetailActivity"            android:exported="false" />
         <activity android:name=".Log.ListActivity"              android:exported="false" />

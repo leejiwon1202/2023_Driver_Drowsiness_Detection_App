@@ -62,24 +62,24 @@ public class StartActivity extends AppCompatActivity {
         user_name = pref.getString("user_name", "");
 
         tv_welcome = findViewById(R.id.tv_welcome);
-        if(user_id < 0) {
+//        if(user_id < 0) {
             showCustomDialog();
-        }
-        else {
-            getTask1.execute( "http://" + IP_ADDRESS + "/android_driving_select_php.php", String.valueOf(user_id));
-            getTask2.execute( "http://" + IP_ADDRESS + "/android_drowsy_select_php.php", String.valueOf(user_id));
-            tv_welcome.setText(String.format("반가워요 %s(#%d)님!", user_name, user_id));
-        }
+//        }
+//        else {
+//            getTask1.execute( "http://" + IP_ADDRESS + "/android_driving_select_php.php", String.valueOf(user_id));
+//            getTask2.execute( "http://" + IP_ADDRESS + "/android_drowsy_select_php.php", String.valueOf(user_id));
+//            tv_welcome.setText(String.format("반가워요 %s(#%d)님!", user_name, user_id));
+//        }
 
         // 1
         Button startBtn = findViewById(R.id.startBtn);
         startBtn.setOnClickListener(view -> {
             int isFirst = pref.getInt("Initialization", 0);
             Intent i;
-            if (isFirst == 0)
+            //if (isFirst == 0)
                 i = new Intent(StartActivity.this, InitializationActivity.class);
-            else
-                i = new Intent(StartActivity.this, DrowsyDetectActivity.class);
+            //else
+            //    i = new Intent(StartActivity.this, DrowsyDetectActivity.class);
             startActivity(i);
         });
 

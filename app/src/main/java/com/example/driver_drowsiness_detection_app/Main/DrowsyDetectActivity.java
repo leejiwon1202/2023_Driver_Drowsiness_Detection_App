@@ -3,6 +3,7 @@ package com.example.driver_drowsiness_detection_app.Main;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.os.Bundle;
@@ -53,23 +54,19 @@ public class DrowsyDetectActivity extends AppCompatActivity {
 
         interpreter = getTfliteInterpreter("DrowsyDetect.tflite");
 
-        Button btn_start = findViewById(R.id.btn_start);
-        btn_start.setOnClickListener(view -> {
-            s_time = format.format(new Date());
-
-            InsertData_Driving insTask = new InsertData_Driving();
-            insTask.execute("http://"+IP_ADDRESS+"/android_driving_insert_php.php", String.valueOf(user_id), s_time, s_time);
-            driving_id = getID(getTask.getmJsonString());
-        });
+        s_time = format.format(new Date());
+        InsertData_Driving insDTask = new InsertData_Driving();
+        insDTask.execute("http://"+IP_ADDRESS+"/android_driving_insert_php.php", String.valueOf(user_id), s_time, s_time);
+        driving_id = getID(getTask.getmJsonString());
 
         Button btn_stop = findViewById(R.id.btn_stop);
         btn_stop.setOnClickListener(view -> {
             InsertData_Driving insTask = new InsertData_Driving();
             insTask.execute("http://"+IP_ADDRESS+"/android_driving_update_php.php", String.valueOf(user_id), s_time, format.format(new Date()));
 
-            //Intent i = new Intent(DrowsyDetectActivity.this, SaveActivity.class);
-            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            //startActivity(i);
+            Intent i = new Intent(DrowsyDetectActivity.this, ExitActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
         });
 
         Button btn_drowsy = findViewById(R.id.btn_drowsy);
