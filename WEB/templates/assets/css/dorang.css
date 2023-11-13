@@ -11192,7 +11192,7 @@ a:hover {
 }
 
 .modalBox-body {
-  margin-left: 30%;
+  margin-left: 25%;
 }
 
 .modalBox.show {
@@ -11504,7 +11504,7 @@ a:hover {
   min-height: 600px;
   text-align: center;
   color: #fff;
-  background-image: url(../imgs/ai.png);
+  background-image: url(../imgs/ai3.jpg);
   background-size: cover;
   background-position: center;
   -webkit-transition: .2s;
