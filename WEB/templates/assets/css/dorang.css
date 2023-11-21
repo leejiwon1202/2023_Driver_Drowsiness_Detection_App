@@ -11191,8 +11191,8 @@ a:hover {
           transform: translate(-50%, -50%);
 }
 
-.modalBox-body {
-  margin-left: 25%;
+.modalBox-body {  /* left 조정 구간 */
+  margin-left: 30%;
 }
 
 .modalBox.show {

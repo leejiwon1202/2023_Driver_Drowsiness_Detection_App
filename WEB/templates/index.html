@@ -11,80 +11,61 @@
 </head>
 
 <body data-spy="scroll" data-target=".navbar" data-offset="40" id="home" class="dark-theme">
-    <nav class="page-navbar" data-spy="affix" data-offset-top="10">
-        <ul class="nav-navbar container">   
-            <li class="nav-item"><a href="#" class="nav-link"></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><img src="assets/imgs/asd.png" alt="Download free bootstrap 4 landing page, free boootstrap 4 templates, Download free bootstrap 4.1 landing page, free boootstrap 4.1.1 templates, weber Landing page"></a></li>
-            <li class="nav-item"><a href="#" class="nav-link"></a></li>
-        </ul>
-    </nav>
+  <nav class="page-navbar" data-spy="affix" data-offset-top="10">
+    <ul class="nav-navbar container">   
+      <li class="nav-item"><a href="#" class="nav-link"></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"><img src="assets/imgs/asd.png" alt="Download free bootstrap 4 landing page, free boootstrap 4 templates, Download free bootstrap 4.1 landing page, free boootstrap 4.1.1 templates, weber Landing page"></a></li>
+      <li class="nav-item"><a href="#" class="nav-link"></a></li>
+    </ul>
+  </nav>
     
-    <header class="header">
-        <div class="overlay"></div>
-        <div class="header-content">
-            <h1 class="header-title">딥러닝 비디오 분류 모델을 활용한 졸음 판단 시스템</h1>
-            <p></p>
-            <p class="header-subtitle">2023 컴퓨터공학과 졸업 작품 전시회</p>
-
-            <button class="btn btn-theme-color modal-toggle"><i class="ti-control-play text-danger"></i>  시작하기  </button>
-        </div>
-    </header>
-
-    <div class="modalBox">
-        <div class="modalBox-body">
-            <iframe width="120%" height="480px" class="border-0"
-                src="{{ url_for('video') }}">
-            </iframe>
-        </div>          
+  <header class="header">
+    <div class="overlay"></div>
+    <div class="header-content">
+      <h1 class="header-title">딥러닝 비디오 분류 모델을 활용한 졸음 판단 시스템</h1>
+      <p></p>
+      <p class="header-subtitle">2023 컴퓨터공학과 졸업 작품 전시회</p>
+      <button class="btn btn-theme-color modal-toggle"><i class="ti-control-play text-danger"></i>  시작하기  </button>
     </div>
+  </header>
 
-    <div class="contact-section">
-        <div class="overlay"></div>
-        <div class="container">
-            <footer class="footer">
-                <p class="infos">
-                    <script>document.write(
-                    new Date().getFullYear().toString() + ". " + 
-                    (new Date().getMonth() + 1).toString() +". " +
-                    new Date().getDate().toString()
-                    )</script>
-                </p> 
-                <div class="links">
-                    <a>컴퓨터공학과 이지원</a>
-               </div>
-            </footer>
+  <div class="modalBox">
+    <div class="modalBox-body">
+      <iframe width="120%" height="480px" class="border-0 modalBox-iframe">
+        <!-- src="{{ url_for('video') }}"> -->
+      </iframe>
+    </div>          
+  </div>
 
+  <div class="contact-section">
+    <div class="overlay"></div>
+    <div class="container">
+      <footer class="footer">
+        <p class="infos">
+          <script>document.write(
+          new Date().getFullYear().toString() + ". " + 
+          (new Date().getMonth() + 1).toString() +". " +
+          new Date().getDate().toString()
+          )</script>
+        </p> 
+        <div class="links">
+            <a>컴퓨터공학과 이지원</a>
         </div>
+      </footer>
     </div>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"
-        integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ=="
-        crossorigin="anonymous"></script>
-    <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
-    <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
-    <script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
-    <script src="assets/js/dorang.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function () {
-        var socket = io();
-
-        socket.on('response', function (msg, cb) {
-            console.log(msg.text)
-            Swal.fire({
-                title: 'WARNING !!!',
-                text: "눈을 깜빡여주시길 바랍니다.",
-                icon: 'warning',
-                confirmButtonColor: '#d33',
-                //cancelButtonColor: '#d33',
-                confirmButtonText: '확인',
-                //cancelButtonText: '확인'
-            })
-        });
-    });
-    </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+      integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+      crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"
+      integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ=="
+      crossorigin="anonymous"></script>
+  <script src="assets/vendors/jquery/jquery-3.4.1.js"></script>
+  <script src="assets/vendors/bootstrap/bootstrap.bundle.js"></script>
+  <script src="assets/vendors/bootstrap/bootstrap.affix.js"></script>
+  <script src="assets/js/dorang.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
