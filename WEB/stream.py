@@ -24,8 +24,8 @@ def getUserState(model, input):
   result = model(input)[0].detach().cpu().numpy()
   print(result)
 
-  if result[1] >= 2:
-    return ("Drowsy!!!", (0, 0, 255))
+  if result[1] >= 1:
+    return ("Drowsy!!!", (0, 0, 255)) # drowsy 판별
   else:
     return ("Normal", (255, 0, 0))
 
